@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../utils/supabaseClient'
 import { Box, Flex, Heading, Text, TextField, TextArea, Button, Card, Container, Separator } from '@radix-ui/themes'
 import { PlusIcon } from '@radix-ui/react-icons'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function CreatePage() {
   const [title, setTitle] = useState('')
@@ -84,13 +85,7 @@ export default function CreatePage() {
     }
   }
 
-  if (loading) return (
-    <Container size="2">
-      <Flex justify="center" align="center" style={{ height: '80vh' }}>
-        <Text size="3">Loading...</Text>
-      </Flex>
-    </Container>
-  )
+  if (loading) return <LoadingSpinner message="Loading..." />
 
   if (!user) return (
     <Container size="2">

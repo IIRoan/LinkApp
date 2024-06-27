@@ -27,13 +27,14 @@ function AppContent({ isDarkMode, toggleDarkMode }) {
           <Box>
             {user && (
               <DropdownMenu.Root>
-                <DropdownMenu.Trigger>
-                  <Avatar
-                    size="2"
-                    src={user.user_metadata?.avatar_url}
-                    fallback={<PersonIcon />}
-                    style={{ cursor: 'pointer' }}
-                  />
+                <DropdownMenu.Trigger asChild>
+                  <Box style={{ cursor: 'pointer' }}>
+                    <Avatar
+                      size="2"
+                      src={user.user_metadata?.avatar_url}
+                      fallback={<PersonIcon width="24" height="24" />}
+                    />
+                  </Box>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content>
                   <DropdownMenu.Item>
@@ -91,7 +92,6 @@ function App() {
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
-
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
@@ -99,6 +99,7 @@ function App() {
   return (
     <Theme 
       accentColor="teal"
+      grayColor="slate"
       scaling="100%"
       radius="full"
       appearance={isDarkMode ? 'dark' : 'light'}

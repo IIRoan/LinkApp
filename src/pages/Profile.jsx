@@ -4,6 +4,7 @@ import { supabase } from '../utils/supabaseClient'
 import { Box, Flex, Heading, Text, Button, Card, Avatar, Separator, TextField, AlertDialog, Tooltip } from '@radix-ui/themes'
 import { PersonIcon, EnvelopeClosedIcon, ExitIcon, UpdateIcon, PlusIcon, LockClosedIcon, Link2Icon } from '@radix-ui/react-icons'
 import { useNavigate } from 'react-router-dom'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function Profile() {
   const { user, signOut } = useAuth()
@@ -152,7 +153,7 @@ export default function Profile() {
   }
 
 
-  if (loading) return <Box p="4">Loading...</Box>
+  if (loading) return <LoadingSpinner message="Loading..." />
 
   return (
     <Flex align="center" justify="center" style={{ minHeight: '75vh' }}>

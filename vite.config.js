@@ -6,5 +6,5 @@ export default defineConfig({
   plugins: [react()],
   ssr: {
     noExternal: ['@radix-ui/themes']
-  }
+  },
 })

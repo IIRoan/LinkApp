@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../utils/supabaseClient'
 import { Flex, Box, Text, Heading, TextField, TextArea, Button, Card, Avatar, Link, Separator, Theme, Dialog, ScrollArea } from '@radix-ui/themes'
 import { PlusIcon, Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function EditPage() {
   const { slug } = useParams()
@@ -286,7 +287,7 @@ export default function EditPage() {
 
 
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <LoadingSpinner message="Loading..." />
   if (error) return <div>Error: {error}</div>
   if (!page) return <div>Page not found</div>
   return (

@@ -9,6 +9,7 @@ import {
   ImageIcon,
   Pencil1Icon
 } from '@radix-ui/react-icons'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function DisplayPage() {
   const { slug } = useParams()
@@ -82,7 +83,7 @@ export default function DisplayPage() {
     }
   }
 
-  if (loading) return <div>Loading...</div>
+  if (loading) return <LoadingSpinner message="Loading..." />
   if (error) return <div>Error: {error}</div>
   if (!page) return <div>Page not found</div>
 

@@ -5,6 +5,7 @@ import { supabase } from '../utils/supabaseClient'
 import { Box, Flex, Heading, Text, Button, Card, TextField, Tabs, Separator } from '@radix-ui/themes'
 import { EnvelopeClosedIcon, LockClosedIcon, GitHubLogoIcon, ChevronDownIcon, ChevronUpIcon, CodeIcon  } from '@radix-ui/react-icons'
 import * as Collapsible from '@radix-ui/react-collapsible';
+import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function Auth() {
   const [email, setEmail] = useState('')
@@ -83,8 +84,7 @@ export default function Auth() {
     }
   }
 
-  if (loading) return <Box p="4">Loading...</Box>
-
+  if (loading) return <LoadingSpinner message="Welcome!" />
   return (
     <Flex align="center" justify="center" style={{ minHeight: '60vh' }}>
     <Box p="4" style={{ maxWidth: '400px', margin: '0 auto'}}>

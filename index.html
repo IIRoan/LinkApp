@@ -3,8 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="preload" href="/node_modules/@radix-ui/themes/styles.css" as="style">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LinkApp</title>
+    <style>
+      :root {
+        --initial-bg-light: #ffffff;
+        --initial-bg-dark: #111111;
+      }
+      html, body, #root {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
+      @media (prefers-color-scheme: light) {
+        body, #root {
+          background-color: var(--initial-bg-light);
+        }
+      }
+      @media (prefers-color-scheme: dark) {
+        body, #root {
+          background-color: var(--initial-bg-dark);
+        }
+      }
+    </style>
+    
   </head>
   <body>
     <div id="root"></div>
