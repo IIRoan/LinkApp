@@ -97,7 +97,7 @@ export default function Auth() {
           <Button
             onClick={handleGitHubSignIn}
             disabled={loading}
-            variant="soft"
+            variant="hard"
             style={{ width: '100%' }}
           >
             <GitHubLogoIcon mr="2" />
