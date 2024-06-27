@@ -44,7 +44,7 @@ const PricingTable = () => (
 
 export default function LandingPage() {
   return (
-    <Box>
+    <Box style={{ paddingTop: '1rem' }}>
       <Section size="3" style={{ background: 'var(--accent-3)', paddingTop: '6rem', paddingBottom: '6rem' }}>
         <Container size="3">
           <Flex direction="column" align="center" gap="6">

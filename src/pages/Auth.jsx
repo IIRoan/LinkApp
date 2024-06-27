@@ -86,7 +86,7 @@ export default function Auth() {
 
   if (loading) return <LoadingSpinner message="Welcome!" />
   return (
-    <Flex align="center" justify="center" style={{ minHeight: '60vh' }}>
+    <Flex align="center" justify="center" style={{ minHeight: '80vh' }}>
     <Box p="4" style={{ maxWidth: '400px', margin: '0 auto'}}>
       <Card>
         <Heading size="8" mb="6">
