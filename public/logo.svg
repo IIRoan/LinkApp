@@ -1,0 +1,7 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <g transform="rotate(90 100 100)">
+    <path d="M40 160 L100 40 L160 160 L40 160" fill="black"/>
+    <path d="M70 170 L100 100 L130 170" stroke="white" stroke-width="20" fill="none"/>
+    <path d="M115 L145" stroke="white" stroke-width="20" stroke-linecap="round"/>
+  </g>
+</svg>
