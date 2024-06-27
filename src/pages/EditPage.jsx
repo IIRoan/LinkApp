@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../utils/supabaseClient'
-import { Flex, Box, Text, Heading, TextField, TextArea, Button, Card, Avatar, Link, Separator, Theme, Dialog, ScrollArea } from '@radix-ui/themes'
-import { PlusIcon, Pencil1Icon, TrashIcon } from '@radix-ui/react-icons'
+import { Flex, Box, Text, Heading, TextField, TextArea, Button, Card, Avatar, Link, Separator, Theme, Dialog, ScrollArea, IconButton } from '@radix-ui/themes'
+import { PlusIcon, Pencil1Icon, TrashIcon, Cross2Icon, ImageIcon } from '@radix-ui/react-icons'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function EditPage() {
@@ -291,29 +291,36 @@ export default function EditPage() {
   if (error) return <div>Error: {error}</div>
   if (!page) return <div>Page not found</div>
   return (
-    <Flex justify="center" align="center" style={{ minHeight: '100vh', padding: '20px' }}>
-      <Card style={{ maxWidth: '800px', width: '100%', height: '100%' }}>
-        <Box p="4">
-          <Heading size="8" mb="4">Edit Page</Heading>
-          <Button onClick={() => navigate(`/${slug}`)} mb="4">Go Back</Button>
+    <Flex justify="center" align="center" style={{ minHeight: '80vh', padding: '20px' }}>
+      <Card style={{ maxWidth: '600px', width: '100%' }}>
+        <Box p="6">
+          <Flex justify="between" align="center" mb="4">
+            <Heading size="8">Edit Page</Heading>
+            <Button onClick={() => navigate(`/${slug}`)}>Go Back</Button>
+          </Flex>
 
           <form onSubmit={handleSubmit}>
             <Flex direction="column" gap="4">
               <Box>
-                <Text as="label" htmlFor="title" size="2" weight="bold">Title:</Text>
+                <Text as="label" size="2" weight="bold" mb="1">
+                  Title
+                </Text>
                 <TextField.Root
-                  id="title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Enter page title"
                   required
-                />
+                >
+                </TextField.Root>
               </Box>
               <Box>
-                <Text as="label" htmlFor="description" size="2" weight="bold">Description:</Text>
+                <Text as="label" size="2" weight="bold" mb="1">
+                  Description
+                </Text>
                 <TextArea
-                  id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Enter page description"
                   required
                 />
               </Box>
@@ -322,7 +329,6 @@ export default function EditPage() {
               </Button>
             </Flex>
           </form>
-
 
           <Separator my="6" size="4" />
 
@@ -336,41 +342,48 @@ export default function EditPage() {
           <Flex direction="column" gap="3">
             {links.map(link => (
               <Card key={link.id}>
-                <Flex align="center" justify="between">
+                <Flex align="center" justify="between" p="3">
                   <Flex align="center" gap="3">
                     <Avatar
                       src={link.image_url}
                       fallback={link.title[0]}
                       size="3"
                     />
-                    <Link href={link.url} target="_blank" rel="noopener noreferrer">{link.title}</Link>
+                    <Link href={link.url} target="_blank" rel="noopener noreferrer">
+                      {link.title}
+                    </Link>
                   </Flex>
                   <Flex gap="2">
-                    <Button onClick={() => handleEditLink(link)}>
+                    <Button variant="soft" onClick={() => handleEditLink(link)}>
                       <Pencil1Icon /> Edit
                     </Button>
-                    <Button color="red" onClick={() => handleRemoveLink(link.id)}>Remove</Button>
+                    <Button variant="soft" color="red" onClick={() => handleRemoveLink(link.id)}>
+                      Remove
+                    </Button>
                   </Flex>
                 </Flex>
                 {editingLinkId === link.id && (
-                  <Box mt="2">
+                  <Box mt="3" p="3">
                     <form onSubmit={handleUpdateLink}>
-                      <Flex direction="column" gap="2">
+                      <Flex direction="column" gap="3">
                         <TextField.Root
                           placeholder="Link Title"
                           value={editingLink.title}
                           onChange={(e) => setEditingLink({ ...editingLink, title: e.target.value })}
                           required
-                        />
+                        >
+
+                        </TextField.Root>
                         <TextField.Root
                           placeholder="Link URL"
                           type="url"
                           value={editingLink.url}
                           onChange={(e) => setEditingLink({ ...editingLink, url: e.target.value })}
                           required
-                        />
-                        <Box>
-                          <Button asChild>
+                        >
+                        </TextField.Root>
+                        <Flex align="center" gap="3">
+                          <Button asChild variant="soft">
                             <label htmlFor={`image-upload-${link.id}`}>Change Image</label>
                           </Button>
                           <input
@@ -380,14 +393,14 @@ export default function EditPage() {
                             onChange={handleImageUpdate}
                             style={{ display: 'none' }}
                           />
-                        </Box>
-                        {editingLink.image_url && (
-                          <Avatar
-                            src={editingLink.image_url}
-                            fallback={editingLink.title[0]}
-                            size="5"
-                          />
-                        )}
+                          {editingLink.image_url && (
+                            <Avatar
+                              src={editingLink.image_url}
+                              fallback={editingLink.title[0]}
+                              size="3"
+                            />
+                          )}
+                        </Flex>
                         <Button type="submit">Update Link</Button>
                       </Flex>
                     </form>
@@ -397,23 +410,23 @@ export default function EditPage() {
             ))}
           </Flex>
         </Box>
-        <Flex justify="center" mt="4" style={{ width: '100%' }}>
+        <Flex justify="center" mt="4" mb="4">
           <Button
             color="red"
             variant="soft"
             onClick={() => setIsDeleteDialogOpen(true)}
-            style={{ width: '200px' }}
           >
             <TrashIcon /> Delete Page
           </Button>
         </Flex>
-
       </Card>
-
 
       <Dialog.Root open={isAddLinkModalOpen} onOpenChange={setIsAddLinkModalOpen}>
         <Dialog.Content style={{ maxWidth: 450 }}>
           <Dialog.Title>Add New Link</Dialog.Title>
+          <Dialog.Description size="2" mb="4">
+            Fill in the details to add a new link to your page.
+          </Dialog.Description>
           <form onSubmit={handleAddLink}>
             <Flex direction="column" gap="4">
               <TextField.Root
@@ -421,45 +434,64 @@ export default function EditPage() {
                 value={newLink.title}
                 onChange={(e) => setNewLink({ ...newLink, title: e.target.value })}
                 required
-              />
+              >
+
+              </TextField.Root>
               <TextField.Root
                 placeholder="Link URL"
                 type="url"
                 value={newLink.url}
                 onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
                 required
-              />
-              <Box>
-                <Button asChild>
-                  <label htmlFor="image-upload">Upload Image</label>
+              >
+              </TextField.Root>
+              <Flex align="center" gap="3">
+                <Button asChild variant="soft">
+                  <label htmlFor="image-upload">
+                    <Flex align="center" gap="2">
+                      <ImageIcon />
+                      Upload Image
+                    </Flex>
+                  </label>
                 </Button>
                 <input
+                  id="image-upload"
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload}
                   style={{ display: 'none' }}
-                  id="image-upload"
                 />
-              </Box>
-              {newLink.image && (
-                <Avatar
-                  src={newLink.image}
-                  fallback={newLink.title[0]}
-                  size="5"
-                />
-              )}
-              <Flex gap="3" mt="4" justify="end">
-                <Dialog.Close>
-                  <Button variant="soft" color="gray">
-                    Cancel
-                  </Button>
-                </Dialog.Close>
-                <Button type="submit">Add Link</Button>
+                {newLink.image && (
+                  <Flex align="center" gap="2">
+                    <Avatar
+                      src={newLink.image}
+                      fallback={newLink.title[0]}
+                      size="3"
+                    />
+                    <IconButton
+                      size="1"
+                      variant="ghost"
+                      color="gray"
+                      onClick={() => setNewLink({ ...newLink, image: null })}
+                    >
+                      <Cross2Icon />
+                    </IconButton>
+                  </Flex>
+                )}
               </Flex>
+            </Flex>
+            <Flex gap="3" mt="4" justify="end">
+              <Dialog.Close>
+                <Button variant="soft" color="gray">
+                  Cancel
+                </Button>
+              </Dialog.Close>
+              <Button type="submit">Add Link</Button>
             </Flex>
           </form>
         </Dialog.Content>
       </Dialog.Root>
+
       <Dialog.Root open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <Dialog.Content style={{ maxWidth: 450 }}>
           <Dialog.Title>Confirm Page Deletion</Dialog.Title>
