@@ -1,0 +1,7 @@
+.radix-themes:where(.dark, .dark-theme), 
+:root:where(:has(.radix-themes[data-is-root-theme="true"]:where(.dark, .dark-theme))) {
+  background-color: #111113;
+}
+
+
+
