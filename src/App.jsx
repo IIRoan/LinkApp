@@ -6,6 +6,7 @@ import Profile from './pages/Profile'
 import CreatePage from './pages/CreatePage'
 import DisplayPage from './pages/DisplayPage'
 import EditPage from './pages/EditPage'
+import Footer from './components/Footer'
 import '@radix-ui/themes/styles.css';
 import LandingPage from './pages/LandingPage'
 import { Theme, Flex, Switch, Box, Avatar, DropdownMenu, Select } from '@radix-ui/themes';
@@ -38,7 +39,7 @@ function AppContent({ isDarkMode, toggleDarkMode, accentColor, setAccentColor })
   const { user, signOut } = useAuth();
 
   return (
-    <Box style={{ minHeight: '100vh', width: '100%' }}>
+    <Box style={{ minHeight: '100vh', width: '100%', display: 'flex', flexDirection: 'column' }}>
       <Router>
         <Flex
           justify="between"
@@ -125,6 +126,7 @@ function AppContent({ isDarkMode, toggleDarkMode, accentColor, setAccentColor })
             <Route path="*" element={<Navigate to="/404" replace />} />
           </Routes>
         </Box>
+        <Footer />
       </Router>
     </Box>
   )
