@@ -7,6 +7,7 @@ import CreatePage from './pages/CreatePage'
 import DisplayPage from './pages/DisplayPage'
 import EditPage from './pages/EditPage'
 import '@radix-ui/themes/styles.css';
+import LandingPage from './pages/LandingPage'
 import { Theme, Flex, Switch, Box, Avatar, DropdownMenu, Select } from '@radix-ui/themes';
 import { MoonIcon, SunIcon, PersonIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import './theme-override.css';
@@ -114,6 +115,7 @@ function AppContent({ isDarkMode, toggleDarkMode, accentColor, setAccentColor })
         </Flex>
         <Box pt="6">
           <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/create-page" element={<CreatePage />} />
