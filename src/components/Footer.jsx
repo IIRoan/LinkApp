@@ -13,6 +13,7 @@ const Footer = () => {
         bottom: 0,
         left: 0,
         right: 0,
+        borderTop: '1px solid var(--gray-a4)',
         backgroundColor: 'var(--color-background)',
         zIndex: 1000
       }}

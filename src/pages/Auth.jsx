@@ -44,7 +44,13 @@ export default function Auth() {
     setLoading(true)
     setError(null)
     try {
-      const { error } = await signUp({ email, password })
+      const { error } = await signUp({ 
+        email, 
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/create-page`
+        }
+      })
       if (error) throw error
       alert('Check your email for the confirmation link!')
     } catch (error) {
@@ -53,13 +59,16 @@ export default function Auth() {
       setLoading(false)
     }
   }
-
+  
   async function handleGitHubSignIn() {
     setLoading(true)
     setError(null)
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/profile`
+        }
       })
       if (error) throw error
     } catch (error) {
@@ -75,6 +84,9 @@ export default function Auth() {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'gitlab',
+        options: {
+          redirectTo: `${window.location.origin}/profile`
+        }
       })
       if (error) throw error
     } catch (error) {
@@ -83,7 +95,6 @@ export default function Auth() {
       setLoading(false)
     }
   }
-
   if (loading) return <LoadingSpinner message="Welcome!" />
   return (
     <Flex align="center" justify="center" style={{ minHeight: '80vh' }}>
