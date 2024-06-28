@@ -44,13 +44,7 @@ export default function Auth() {
     setLoading(true)
     setError(null)
     try {
-      const { error } = await signUp({ 
-        email, 
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/create-page`
-        }
-      })
+      const { error } = await signUp({ email, password })
       if (error) throw error
       alert('Check your email for the confirmation link!')
     } catch (error) {
@@ -59,7 +53,7 @@ export default function Auth() {
       setLoading(false)
     }
   }
-  
+
   async function handleGitHubSignIn() {
     setLoading(true)
     setError(null)
