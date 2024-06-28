@@ -120,7 +120,7 @@ export default function Auth() {
         <Collapsible.Root>
           <Collapsible.Trigger asChild>
             <Button variant="ghost" style={{ width: '100%' }}>
-              {showEmailPassword ? 'Hide' : 'Show'} Email/Password Login
+              {showEmailPassword ? 'Hide' : 'Show'} Email/Password Login (not recommended)
               {showEmailPassword ? <ChevronUpIcon /> : <ChevronDownIcon />}
             </Button>
           </Collapsible.Trigger>
