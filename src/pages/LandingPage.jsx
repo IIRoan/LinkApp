@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Flex, Box, Heading, Text, Button, Card, Container, Grid, Section } from '@radix-ui/themes';
 import { Link2Icon, PersonIcon, ColorWheelIcon, RocketIcon, CheckIcon } from '@radix-ui/react-icons';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const FeatureCard = ({ icon, title, description }) => (
   <Card size="2">
@@ -43,6 +44,21 @@ const PricingTable = () => (
 );
 
 export default function LandingPage() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 150);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <Box style={{ paddingTop: '1rem' }}>
       <Section size="3" style={{ background: 'var(--accent-3)', paddingTop: '6rem', paddingBottom: '6rem' }}>
@@ -64,22 +80,22 @@ export default function LandingPage() {
           <Flex direction="column" gap="8">
             <Heading size="8" align="center">Key Features</Heading>
             <Grid columns={{ initial: '1', sm: '2', md: '3' }} gap="4">
-              <FeatureCard 
+              <FeatureCard
                 icon={<Link2Icon />}
                 title="Custom URL"
                 description="Create a personalized page with your own unique URL"
               />
-              <FeatureCard 
+              <FeatureCard
                 icon={<PersonIcon />}
                 title="Profile Customization"
                 description="Add a profile picture and description to make your page stand out"
               />
-              <FeatureCard 
+              <FeatureCard
                 icon={<ColorWheelIcon />}
                 title="Easy Interface"
                 description="User-friendly design with dark mode support"
               />
-              <FeatureCard 
+              <FeatureCard
                 icon={<RocketIcon />}
                 title="Quick Setup"
                 description="Get started in minutes and share your links with the world"

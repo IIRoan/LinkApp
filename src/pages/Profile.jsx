@@ -52,14 +52,21 @@ export default function Profile() {
     try {
       setLoading(true)
       setEmailSent(false)
-      const { error: updateError } = await supabase.auth.updateUser({
-        email: email
-      })
+      setError(null)
 
-      if (updateError) throw updateError
+      let emailUpdated = false;
 
-      setEmailSent(true)
+      // Only update email if it has changed
+      if (email !== user.email) {
+        const { error: updateError } = await supabase.auth.updateUser({
+          email: email
+        })
 
+        if (updateError) throw updateError
+        emailUpdated = true;
+      }
+
+      // Update avatar if changed
       if (avatar_url && avatar_url.startsWith('data:image')) {
         const file = await dataURLtoFile(avatar_url, 'avatar.png')
         const filePath = `images/${user.id}/${Date.now()}.png`
@@ -93,6 +100,13 @@ export default function Profile() {
         setAvatarUrl(publicUrl)
       }
 
+      // Set email sent message only if email was updated
+      if (emailUpdated) {
+        setEmailSent(true)
+      } else {
+        setError("Profile updated successfully!")
+      }
+
     } catch (error) {
       console.error('Error updating profile:', error.message)
       setError(error.message)
@@ -100,6 +114,7 @@ export default function Profile() {
       setLoading(false)
     }
   }
+
 
   async function getUserPages() {
     try {

@@ -4,10 +4,10 @@ import { GitHubLogoIcon } from '@radix-ui/react-icons';
 
 const Footer = () => {
   return (
-    <Box 
-      as="footer" 
-      py="4" 
-      px="4" 
+    <Box
+      as="footer"
+      py="2"
+      px="4"
       style={{
         position: 'fixed',
         bottom: 0,
@@ -18,9 +18,18 @@ const Footer = () => {
       }}
     >
       <Flex justify="between" align="center">
-        <Text size="2" color="gray">
-          © {new Date().getFullYear()} IRoan. All rights reserved.
-        </Text>
+        <Flex align="center">
+          <Text size="2" color="gray">
+            © {new Date().getFullYear()}&nbsp;
+          </Text>
+          <Text size="2" color="accent" style={{ color: 'var(--accent-9)' }}>
+            IRoan
+          </Text>
+          <Text size="2" color="gray">
+            . All rights reserved.
+          </Text>
+        </Flex>
+
         <Flex gap="4">
           <Link href="https://github.com/IIRoan/linkapp" target="_blank" rel="noopener noreferrer">
             <GitHubLogoIcon width="20" height="20" />
