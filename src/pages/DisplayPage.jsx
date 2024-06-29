@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../utils/supabaseClient'
 import { Card, Avatar, Text, Heading, Box, Flex, Button } from '@radix-ui/themes'
 import {
@@ -11,8 +11,10 @@ import {
 } from '@radix-ui/react-icons'
 import LoadingSpinner from '../components/LoadingSpinner'
 
+
 export default function DisplayPage() {
   const { slug } = useParams()
+  const navigate = useNavigate()
   const [page, setPage] = useState(null)
   const [links, setLinks] = useState([])
   const [loading, setLoading] = useState(true)
@@ -31,7 +33,16 @@ export default function DisplayPage() {
           .eq('slug', slug)
           .single()
 
-        if (pageError) throw pageError
+        if (pageError) {
+          if (pageError.code === 'PGRST116') {
+            // No rows found, navigate to 404
+            navigate('/404')
+            return
+          }
+          // Other error occurred
+          throw pageError
+        }
+        
         setPage(pageData)
 
         // Fetch avatar URL
@@ -47,7 +58,6 @@ export default function DisplayPage() {
           setAvatarUrl(avatarData?.image_url)
         }
 
-
         // Fetch links associated with the page
         const { data: linksData, error: linksError } = await supabase
           .from('links')
@@ -58,7 +68,7 @@ export default function DisplayPage() {
         if (linksError) throw linksError
         setLinks(linksData)
 
-        // Optionally fetch user data if there's an active session
+        // Logged in check for user to display edit button
         const { data: { user } } = await supabase.auth.getUser()
         setUser(user)
 
@@ -71,7 +81,7 @@ export default function DisplayPage() {
     }
 
     fetchPageAndLinks()
-  }, [slug])
+  }, [slug, navigate])
 
   function getFaviconUrl(url) {
     try {

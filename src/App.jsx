@@ -7,6 +7,7 @@ import CreatePage from './pages/CreatePage'
 import DisplayPage from './pages/DisplayPage'
 import EditPage from './pages/EditPage'
 import Footer from './components/Footer'
+import NotFound from './pages/NotFound'
 import '@radix-ui/themes/styles.css';
 import LandingPage from './pages/LandingPage'
 import { Theme, Flex, Switch, Box, Avatar, DropdownMenu, Select } from '@radix-ui/themes';
@@ -120,10 +121,10 @@ function AppContent({ isDarkMode, toggleDarkMode, accentColor, setAccentColor })
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/create-page" element={<CreatePage />} />
-            <Route path="/:slug/edit" element={<EditPage />} />
+            <Route path="/:slug/edit" element={<EditPage />}/>
             <Route path="/:slug" element={<DisplayPage />} />
-            <Route path="/" element={<Navigate to="/auth" replace />} />
-            <Route path="*" element={<Navigate to="/404" replace />} />
+            <Route path="/404" element={<NotFound />} />
+            <Route path="*" element={<Navigate to="/404" replace />} /> 
           </Routes>
         </Box>
         <Footer />
