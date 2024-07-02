@@ -13,8 +13,6 @@ import LandingPage from './pages/LandingPage'
 import { Theme, Flex, Switch, Box, Avatar, DropdownMenu, Select } from '@radix-ui/themes';
 import { MoonIcon, SunIcon, PersonIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import './theme-override.css';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const accentColors = [
   'blue',
@@ -204,8 +202,6 @@ function App() {
           setAccentColor={setAccentColor}
         />
       </AuthProvider>
-      <SpeedInsights />
-      <Analytics />
     </Theme>
   )
 }
