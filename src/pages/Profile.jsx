@@ -2,9 +2,15 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../utils/supabaseClient'
 import { Box, Flex, Heading, Text, Button, Card, Avatar, Separator, TextField, AlertDialog, Tooltip } from '@radix-ui/themes'
-import { PersonIcon, EnvelopeClosedIcon, ExitIcon, UpdateIcon, PlusIcon, LockClosedIcon, Link2Icon } from '@radix-ui/react-icons'
+import { PersonIcon, EnvelopeClosedIcon, ExitIcon, UpdateIcon, PlusIcon, Link2Icon } from '@radix-ui/react-icons'
 import { useNavigate } from 'react-router-dom'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { motion, AnimatePresence } from 'framer-motion'
+import { containerVariants, itemVariants } from '../utils/animationVariants';
+
+const MotionCard = motion(Card)
+const MotionFlex = motion(Flex)
+const MotionButton = motion(Button)
 
 export default function Profile() {
   const { user, signOut } = useAuth()
@@ -168,34 +174,31 @@ export default function Profile() {
   }
 
 
+
   if (loading) return <LoadingSpinner message="Loading..." />
 
   return (
     <Flex align="center" justify="center" style={{ minHeight: '75vh' }}>
       <Box p="4" style={{ width: '100%', maxWidth: '400px' }}>
-        <Card>
+        <MotionCard variants={containerVariants} initial="hidden" animate="visible">
           <form onSubmit={updateProfile}>
-            <Flex direction="column" gap="2">
-              <Flex justify="center" mb="4">
-                <Box
+            <MotionFlex direction="column" gap="2" variants={itemVariants}>
+              <MotionFlex justify="center" mb="4" variants={itemVariants}>
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={handleAvatarClick}
-                  style={{
-                    cursor: 'pointer',
-                    display: 'inline-block',
-                  }}
+                  style={{ cursor: 'pointer' }}
                 >
                   <Avatar
                     size="8"
                     src={avatar_url || user.user_metadata?.avatar_url || undefined}
                     fallback={<PersonIcon width="32" height="32" />}
                     radius="full"
-                    style={{
-                      border: '2px solid var(--accent-9)',
-                    }}
+                    style={{ border: '2px solid var(--accent-9)' }}
                   />
-
-                </Box>
-              </Flex>
+                </motion.div>
+              </MotionFlex>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -203,43 +206,69 @@ export default function Profile() {
                 onChange={handleAvatarChange}
                 style={{ display: 'none' }}
               />
-
+  
               <Separator size="4" />
-
-              <TextField.Root
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                required
-              >
-                <TextField.Slot>
-                  <EnvelopeClosedIcon height="16" width="16" />
-                </TextField.Slot>
-              </TextField.Root>
-
-              {emailSent && (
-                <Text color="green" size="2" weight="bold">
-                  An email has been sent to your new address
-                </Text>
-              )}
-
-              {error && (
-                <Text color="red" size="2" weight="bold">
-                  {error}
-                </Text>
-              )}
-
-              <Flex justify="between" mt="4">
-                <Button type="submit" disabled={loading}>
+  
+              <motion.div variants={itemVariants}>
+                <TextField.Root
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email"
+                  required
+                >
+                  <TextField.Slot>
+                    <EnvelopeClosedIcon height="16" width="16" />
+                  </TextField.Slot>
+                </TextField.Root>
+              </motion.div>
+  
+              <AnimatePresence>
+                {emailSent && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                  >
+                    <Text color="green" size="2" weight="bold">
+                      An email has been sent to your new address
+                    </Text>
+                  </motion.div>
+                )}
+  
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                  >
+                    <Text color="red" size="2" weight="bold">
+                      {error}
+                    </Text>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+  
+              <MotionFlex justify="between" mt="4" variants={itemVariants}>
+                <MotionButton
+                  type="submit"
+                  disabled={loading}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   {loading ? <UpdateIcon /> : 'Save changes'}
-                </Button>
+                </MotionButton>
                 <AlertDialog.Root>
                   <AlertDialog.Trigger>
-                    <Button color="red" variant="soft">
+                    <MotionButton
+                      color="red"
+                      variant="soft"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
                       <ExitIcon />
                       Sign Out
-                    </Button>
+                    </MotionButton>
                   </AlertDialog.Trigger>
                   <AlertDialog.Content>
                     <AlertDialog.Title>Confirm Sign Out</AlertDialog.Title>
@@ -260,42 +289,56 @@ export default function Profile() {
                     </Flex>
                   </AlertDialog.Content>
                 </AlertDialog.Root>
-              </Flex>
-            </Flex>
+              </MotionFlex>
+            </MotionFlex>
           </form>
-        </Card>
+        </MotionCard>
         <Separator size="4" my="4" />
-
-        <Card>
-          <Flex justify="between" align="center" mb="2">
+  
+        <MotionCard variants={containerVariants} initial="hidden" animate="visible">
+          <MotionFlex justify="between" align="center" mb="2" variants={itemVariants}>
             <Heading size="6">Your Pages</Heading>
-            <Button onClick={handleCreatePage} size="1">
+            <MotionButton
+              onClick={handleCreatePage}
+              size="1"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               <PlusIcon />
               Create Page
-            </Button>
-          </Flex>
+            </MotionButton>
+          </MotionFlex>
           {userPages.length > 0 ? (
-            <ul style={{ listStyle: 'none', padding: 0 }}>
+            <motion.ul style={{ listStyle: 'none', padding: 0 }}>
               {userPages.map((page, index) => (
-                <li key={index} style={{ marginBottom: '8px' }}>
+                <motion.li
+                  key={index}
+                  style={{ marginBottom: '8px' }}
+                  variants={itemVariants}
+                >
                   <Flex align="center" justify="between">
                     <Flex align="center">
                       <Link2Icon style={{ marginRight: '8px' }} />
                       <Text>{page.slug}</Text>
                     </Flex>
-                    <Button onClick={() => handleGoToPage(page.slug)} size="1" variant="soft">
+                    <MotionButton
+                      onClick={() => handleGoToPage(page.slug)}
+                      size="1"
+                      variant="soft"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
                       Go to Page
-                    </Button>
+                    </MotionButton>
                   </Flex>
-                </li>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
           ) : (
             <Text>You haven't created any pages yet.</Text>
           )}
-        </Card>
+        </MotionCard>
       </Box>
     </Flex>
-
   )
 }

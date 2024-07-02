@@ -4,6 +4,9 @@ import { supabase } from '../utils/supabaseClient'
 import { Box, Flex, Heading, Text, TextField, TextArea, Button, Card, Container, Separator } from '@radix-ui/themes'
 import { PlusIcon } from '@radix-ui/react-icons'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { motion } from 'framer-motion'
+import { inputVariants } from '../utils/animationVariants';
+
 
 export default function CreatePage() {
   const [title, setTitle] = useState('')
@@ -104,43 +107,59 @@ export default function CreatePage() {
      }}
     >
       <Container size="1">
-        <Card>
-          <Flex direction="column" gap="4" p="4">
-            <Heading size="6" align="center">Create Page</Heading>
-            <Separator size="4" />
-            <form onSubmit={handleSubmit}>
-              <Flex direction="column" gap="4">
-                <Box>
-                  <Text as="label" size="2" mb="1" weight="bold">Title</Text>
-                  <TextField.Root
-                    placeholder="Enter page title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                  />
-                </Box>
-                <Box>
-                  <Text as="label" size="2" mb="1" weight="bold">Description</Text>
-                  <TextArea
-                    placeholder="Enter page description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </Box>
-                {error && <Text color="red" size="2">{error}</Text>}
-                {slugError && <Text color="red" size="2">{slugError}</Text>}
-                <Button type="submit" disabled={loading}>
-                  {loading ? 'Creating...' : (
-                    <Flex align="center" gap="2">
-                      <PlusIcon />
-                      Create Page
-                    </Flex>
-                  )}
-                </Button>
-              </Flex>
-            </form>
-          </Flex>
-        </Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Card>
+            <Flex direction="column" gap="4" p="4">
+              <Heading size="6" align="center">Create Page</Heading>
+              <Separator size="4" />
+              <form onSubmit={handleSubmit}>
+                <Flex direction="column" gap="4">
+                  <Box>
+                    <Text as="label" size="2" mb="1" weight="bold">Title</Text>
+                    <motion.div variants={inputVariants} whileFocus="focus" whileBlur="blur">
+                      <TextField.Root
+                        size="3"
+                        placeholder="Enter page title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        required
+                        style={{ width: '100%' }}
+                      />
+                    </motion.div>
+                  </Box>
+                  <Box>
+                    <Text as="label" size="2" mb="1" weight="bold">Description</Text>
+                    <motion.div variants={inputVariants} whileFocus="focus" whileBlur="blur">
+                      <TextArea
+                        size="3"
+                        placeholder="Enter page description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        style={{ width: '100%', minHeight: '100px' }}
+                      />
+                    </motion.div>
+                  </Box>
+                  {error && <Text color="red" size="2">{error}</Text>}
+                  {slugError && <Text color="red" size="2">{slugError}</Text>}
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button type="submit" disabled={loading} size="3" style={{ width: '100%' }}>
+                      {loading ? 'Creating...' : (
+                        <Flex align="center" justify="center" gap="2">
+                          <PlusIcon />
+                          Create Page
+                        </Flex>
+                      )}
+                    </Button>
+                  </motion.div>
+                </Flex>
+              </form>
+            </Flex>
+          </Card>
+        </motion.div>
       </Container>
     </Flex>
   )

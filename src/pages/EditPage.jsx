@@ -4,6 +4,27 @@ import { supabase } from '../utils/supabaseClient'
 import { Flex, Box, Text, Heading, TextField, TextArea, Button, Card, Avatar, Link, Separator, Theme, Dialog, ScrollArea, IconButton } from '@radix-ui/themes'
 import { PlusIcon, Pencil1Icon, TrashIcon, Cross2Icon, ImageIcon } from '@radix-ui/react-icons'
 import LoadingSpinner from '../components/LoadingSpinner'
+import { motion, AnimatePresence } from 'framer-motion'
+import { containerVariants, itemVariants, buttonVariants } from '../utils/animationVariants'
+
+const MotionCard = motion(Card)
+const MotionFlex = motion(Flex)
+const MotionButton = motion(Button)
+const MotionDialogContent = motion(Dialog.Content)
+const MotionDialogOverlay = motion(Dialog.Overlay)
+
+const modalVariants = {
+  hidden: { opacity: 0, y: 50, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.2, ease: "easeOut" } },
+  exit: { opacity: 0, y: 50, scale: 0.95, transition: { duration: 0.2, ease: "easeIn" } }
+}
+
+const overlayVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.2 } },
+  exit: { opacity: 0, transition: { duration: 0.2 } }
+}
+
 
 export default function EditPage() {
   const { slug } = useParams()
@@ -290,136 +311,187 @@ export default function EditPage() {
   if (loading) return <LoadingSpinner message="Loading..." />
   if (error) return <div>Error: {error}</div>
   if (!page) return <div>Page not found</div>
-  return (
-    <Flex justify="center" align="center" style={{ minHeight: '80vh', padding: '20px' }}>
-      <Card style={{ maxWidth: '600px', width: '100%' }}>
-        <Box p="6">
-          <Flex justify="between" align="center" mb="4">
-            <Heading size="8">Edit Page</Heading>
-            <Button onClick={() => navigate(`/${slug}`)}>Go Back</Button>
-          </Flex>
 
-          <form onSubmit={handleSubmit}>
-            <Flex direction="column" gap="4">
-              <Box>
-                <Text as="label" size="2" weight="bold" mb="1">
-                  Title
-                </Text>
-                <TextField.Root
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Enter page title"
-                  required
-                >
-                </TextField.Root>
-              </Box>
-              <Box>
-                <Text as="label" size="2" weight="bold" mb="1">
-                  Description
-                </Text>
-                <TextArea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Enter page description"
-                  required
-                />
-              </Box>
-              <Button type="submit" disabled={loading}>
-                {loading ? 'Updating...' : 'Save Changes'}
-              </Button>
-            </Flex>
-          </form>
-
-          <Separator my="6" size="4" />
-
-          <Flex justify="between" align="center" mb="4">
-            <Heading size="6">Links</Heading>
-            <Button onClick={() => setIsAddLinkModalOpen(true)}>
-              <PlusIcon /> Add Link
-            </Button>
-          </Flex>
-
-          <Flex direction="column" gap="3">
-            {links.map(link => (
-              <Card key={link.id}>
-                <Flex align="center" justify="between" p="3">
-                  <Flex align="center" gap="3">
-                    <Avatar
-                      src={link.image_url}
-                      fallback={link.title[0]}
-                      size="3"
-                    />
-                    <Link href={link.url} target="_blank" rel="noopener noreferrer">
-                      {link.title}
-                    </Link>
-                  </Flex>
-                  <Flex gap="2">
-                    <Button variant="soft" onClick={() => handleEditLink(link)}>
-                      <Pencil1Icon /> Edit
-                    </Button>
-                    <Button variant="soft" color="red" onClick={() => handleRemoveLink(link.id)}>
-                      Remove
-                    </Button>
-                  </Flex>
-                </Flex>
-                {editingLinkId === link.id && (
-                  <Box mt="3" p="3">
-                    <form onSubmit={handleUpdateLink}>
-                      <Flex direction="column" gap="3">
-                        <TextField.Root
-                          placeholder="Link Title"
-                          value={editingLink.title}
-                          onChange={(e) => setEditingLink({ ...editingLink, title: e.target.value })}
-                          required
-                        >
-
-                        </TextField.Root>
-                        <TextField.Root
-                          placeholder="Link URL"
-                          type="url"
-                          value={editingLink.url}
-                          onChange={(e) => setEditingLink({ ...editingLink, url: e.target.value })}
-                          required
-                        >
-                        </TextField.Root>
-                        <Flex align="center" gap="3">
-                          <Button asChild variant="soft">
-                            <label htmlFor={`image-upload-${link.id}`}>Change Image</label>
-                          </Button>
-                          <input
-                            id={`image-upload-${link.id}`}
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpdate}
-                            style={{ display: 'none' }}
-                          />
-                          {editingLink.image_url && (
-                            <Avatar
-                              src={editingLink.image_url}
-                              fallback={editingLink.title[0]}
-                              size="3"
-                            />
-                          )}
-                        </Flex>
-                        <Button type="submit">Update Link</Button>
-                      </Flex>
-                    </form>
-                  </Box>
-                )}
-              </Card>
-            ))}
-          </Flex>
-        </Box>
-        <Flex justify="center" mt="4" mb="4">
-          <Button
-            color="red"
-            variant="soft"
-            onClick={() => setIsDeleteDialogOpen(true)}
+return (
+  <Flex justify="center" align="center" style={{ minHeight: '80vh', padding: '20px' }}>
+    <MotionCard
+      style={{ maxWidth: '600px', width: '100%' }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <Box p="6">
+        <MotionFlex justify="between" align="center" mb="4" variants={itemVariants}>
+          <Heading size="8">Edit Page</Heading>
+          <MotionButton
+            onClick={() => navigate(`/${slug}`)}
+            whileHover="hover"
+            whileTap="tap"
+            variants={buttonVariants}
           >
-            <TrashIcon /> Delete Page
-          </Button>
-        </Flex>
-      </Card>
+            Go Back
+          </MotionButton>
+        </MotionFlex>
+
+        <motion.form onSubmit={handleSubmit} variants={itemVariants}>
+          <Flex direction="column" gap="4">
+            <motion.div variants={itemVariants}>
+              <Text as="label" size="2" weight="bold" mb="1">
+                Title
+              </Text>
+              <TextField.Root
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter page title"
+                required
+              />
+            </motion.div>
+            <motion.div variants={itemVariants}>
+              <Text as="label" size="2" weight="bold" mb="1">
+                Description
+              </Text>
+              <TextArea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Enter page description"
+                required
+              />
+            </motion.div>
+            <MotionButton
+              type="submit"
+              disabled={loading}
+              whileHover="hover"
+              whileTap="tap"
+              variants={buttonVariants}
+            >
+              {loading ? 'Updating...' : 'Save Changes'}
+            </MotionButton>
+          </Flex>
+        </motion.form>
+
+        <Separator my="6" size="4" />
+
+        <MotionFlex justify="between" align="center" mb="4" variants={itemVariants}>
+          <Heading size="6">Links</Heading>
+          <MotionButton
+            onClick={() => setIsAddLinkModalOpen(true)}
+            whileHover="hover"
+            whileTap="tap"
+            variants={buttonVariants}
+          >
+            <PlusIcon /> Add Link
+          </MotionButton>
+        </MotionFlex>
+
+        <AnimatePresence>
+          {links.map(link => (
+            <MotionCard key={link.id} variants={itemVariants} layout>
+              <Flex align="center" justify="between" p="3">
+                <Flex align="center" gap="3">
+                  <Avatar
+                    src={link.image_url}
+                    fallback={link.title[0]}
+                    size="3"
+                  />
+                  <Link href={link.url} target="_blank" rel="noopener noreferrer">
+                    {link.title}
+                  </Link>
+                </Flex>
+                <Flex gap="2">
+                  <MotionButton
+                    variant="soft"
+                    onClick={() => handleEditLink(link)}
+                    whileHover="hover"
+                    whileTap="tap"
+                    variants={buttonVariants}
+                  >
+                    <Pencil1Icon /> Edit
+                  </MotionButton>
+                  <MotionButton
+                    variant="soft"
+                    color="red"
+                    onClick={() => handleRemoveLink(link.id)}
+                    whileHover="hover"
+                    whileTap="tap"
+                    variants={buttonVariants}
+                  >
+                    Remove
+                  </MotionButton>
+                </Flex>
+              </Flex>
+              <AnimatePresence>
+                {editingLinkId === link.id && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                  >
+                    <Box mt="3" p="3">
+                      <form onSubmit={handleUpdateLink}>
+                        <Flex direction="column" gap="3">
+                          <TextField.Root
+                            placeholder="Link Title"
+                            value={editingLink.title}
+                            onChange={(e) => setEditingLink({ ...editingLink, title: e.target.value })}
+                            required
+                          />
+                          <TextField.Root
+                            placeholder="Link URL"
+                            type="url"
+                            value={editingLink.url}
+                            onChange={(e) => setEditingLink({ ...editingLink, url: e.target.value })}
+                            required
+                          />
+                          <Flex align="center" gap="3">
+                            <Button asChild variant="soft">
+                              <label htmlFor={`image-upload-${link.id}`}>Change Image</label>
+                            </Button>
+                            <input
+                              id={`image-upload-${link.id}`}
+                              type="file"
+                              accept="image/*"
+                              onChange={handleImageUpdate}
+                              style={{ display: 'none' }}
+                            />
+                            {editingLink.image_url && (
+                              <Avatar
+                                src={editingLink.image_url}
+                                fallback={editingLink.title[0]}
+                                size="3"
+                              />
+                            )}
+                          </Flex>
+                          <MotionButton
+                            type="submit"
+                            whileHover="hover"
+                            whileTap="tap"
+                            variants={buttonVariants}
+                          >
+                            Update Link
+                          </MotionButton>
+                        </Flex>
+                      </form>
+                    </Box>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </MotionCard>
+          ))}
+        </AnimatePresence>
+      </Box>
+      <Flex justify="center" mt="4" mb="4">
+        <MotionButton
+          color="red"
+          variant="soft"
+          onClick={() => setIsDeleteDialogOpen(true)}
+          whileHover="hover"
+          whileTap="tap"
+          variants={buttonVariants}
+        >
+          <TrashIcon /> Delete Page
+        </MotionButton>
+      </Flex>
+    </MotionCard>
 
       <Dialog.Root open={isAddLinkModalOpen} onOpenChange={setIsAddLinkModalOpen}>
         <Dialog.Content style={{ maxWidth: 450 }}>
@@ -434,17 +506,14 @@ export default function EditPage() {
                 value={newLink.title}
                 onChange={(e) => setNewLink({ ...newLink, title: e.target.value })}
                 required
-              >
-
-              </TextField.Root>
+              />
               <TextField.Root
                 placeholder="Link URL"
                 type="url"
                 value={newLink.url}
                 onChange={(e) => setNewLink({ ...newLink, url: e.target.value })}
                 required
-              >
-              </TextField.Root>
+              />
               <Flex align="center" gap="3">
                 <Button asChild variant="soft">
                   <label htmlFor="image-upload">
@@ -493,6 +562,7 @@ export default function EditPage() {
       </Dialog.Root>
 
       <Dialog.Root open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+      <AnimatePresence>
         <Dialog.Content style={{ maxWidth: 450 }}>
           <Dialog.Title>Confirm Page Deletion</Dialog.Title>
           <Dialog.Description size="2" mb="4">
@@ -509,10 +579,8 @@ export default function EditPage() {
             </Button>
           </Flex>
         </Dialog.Content>
+        </AnimatePresence>
       </Dialog.Root>
-
-
     </Flex>
-  )
-
+  );
 }
