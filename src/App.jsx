@@ -13,8 +13,8 @@ import LandingPage from './pages/LandingPage'
 import { Theme, Flex, Switch, Box, Avatar, DropdownMenu, Select } from '@radix-ui/themes';
 import { MoonIcon, SunIcon, PersonIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import './theme-override.css';
-import { SpeedInsights } from "@vercel/speed-insights/react"
-import { Analytics } from "@vercel/analytics/react"
+import { inject as injectAnalytics } from '@vercel/analytics';
+import { inject as injectSpeedInsights } from '@vercel/speed-insights';
 
 const accentColors = [
   'blue',
@@ -146,6 +146,10 @@ function AppContent({ isDarkMode, toggleDarkMode, accentColor, setAccentColor })
 }
 
 function App() {
+
+  injectAnalytics();
+  injectSpeedInsights();
+
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const saved = localStorage.getItem('isDarkMode');
     return saved !== null ? JSON.parse(saved) : false;
@@ -193,8 +197,7 @@ function App() {
       appearance={isDarkMode ? 'dark' : 'light'}
       hasBackground={true}
     >
-      <SpeedInsights />
-      <Analytics />
+
       <AuthProvider>
         <AppContent
           isDarkMode={isDarkMode}
