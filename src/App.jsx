@@ -13,12 +13,24 @@ import LandingPage from './pages/LandingPage'
 import { Theme, Flex, Switch, Box, Avatar, DropdownMenu, Select } from '@radix-ui/themes';
 import { MoonIcon, SunIcon, PersonIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import './theme-override.css';
+import { SpeedInsights } from "@vercel/speed-insights/react"
+import { Analytics } from "@vercel/analytics/react"
 
 const accentColors = [
-  'red', 'crimson', 'violet',
-  'blue', 'cyan', 'teal', 'mint',
-  'lime', 'amber'
+  'blue',
+  'cyan',
+  'teal',
+  'green',
+  'indigo',
+  'violet',
+  'purple',
+  'pink',
+  'crimson',
+  'orange',
+  'amber'
 ];
+
+
 
 function ColorSwatch({ color }) {
   return (
