@@ -193,6 +193,8 @@ function App() {
       appearance={isDarkMode ? 'dark' : 'light'}
       hasBackground={true}
     >
+      <SpeedInsights />
+      <Analytics />
       <AuthProvider>
         <AppContent
           isDarkMode={isDarkMode}
