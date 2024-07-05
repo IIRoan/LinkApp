@@ -103,7 +103,8 @@ export default function Auth() {
             onClick={handleGitHubSignIn}
             disabled={loading}
             variant="hard"
-            style={{ width: '100%' }}
+            style={{ width: '100%', cursor: 'pointer', }}
+            
           >
             <GitHubLogoIcon mr="2" />
             {loading ? 'Signing In...' : 'Sign In with GitHub'}
@@ -113,7 +114,7 @@ export default function Auth() {
             onClick={handleGitLabSignIn}
             disabled={loading}
             variant="soft"
-            style={{ width: '100%' }}
+            style={{ width: '100%',  cursor: 'pointer', }}
           >
             <CodeIcon mr="2" />
             {loading ? 'Signing In...' : 'Sign In with GitLab'}
@@ -124,7 +125,7 @@ export default function Auth() {
 
         <Collapsible.Root>
           <Collapsible.Trigger asChild>
-            <Button variant="ghost" style={{ width: '100%' }}>
+            <Button variant="ghost" style={{ width: '100%',  cursor: 'pointer', }}>
               {showEmailPassword ? 'Hide' : 'Show'} Email/Password Login (not recommended)
               {showEmailPassword ? <ChevronUpIcon /> : <ChevronDownIcon />}
             </Button>
