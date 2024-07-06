@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../utils/supabaseClient'
 import { Box, Flex, Heading, Text, Button, Card, TextField, Tabs, Separator } from '@radix-ui/themes'
-import { EnvelopeClosedIcon, LockClosedIcon, GitHubLogoIcon, ChevronDownIcon, ChevronUpIcon, CodeIcon  } from '@radix-ui/react-icons'
+import { EnvelopeClosedIcon, LockClosedIcon, GitHubLogoIcon, ChevronDownIcon, ChevronUpIcon, CodeIcon, DiscordLogoIcon  } from '@radix-ui/react-icons'
 import * as Collapsible from '@radix-ui/react-collapsible';
 import LoadingSpinner from '../components/LoadingSpinner'
 
@@ -72,6 +72,25 @@ export default function Auth() {
     }
   }
 
+  
+  async function handleDiscordSignIn() {
+    setLoading(true)
+    setError(null)
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'discord',
+        options: {
+          redirectTo: `${window.location.origin}/profile`
+        }
+      })
+      if (error) throw error
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   async function handleGitLabSignIn() {
     setLoading(true)
     setError(null)
@@ -109,6 +128,16 @@ export default function Auth() {
             <GitHubLogoIcon mr="2" />
             {loading ? 'Signing In...' : 'Sign In with GitHub'}
           </Button>
+
+          <Button
+              onClick={handleDiscordSignIn}
+              disabled={loading}
+              variant="hard"
+              style={{ width: '100%', cursor: 'pointer', backgroundColor: '#7289DA', color: 'white' }}
+            >
+              <DiscordLogoIcon mr="2" />
+              {loading ? 'Signing In...' : 'Sign In with Discord'}
+            </Button>
 
           <Button
             onClick={handleGitLabSignIn}
