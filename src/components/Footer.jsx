@@ -23,9 +23,11 @@ const Footer = () => {
           <Text size="2" color="gray">
             © {new Date().getFullYear()}&nbsp;
           </Text>
-          <Text size="2" color="accent" style={{ color: 'var(--accent-9)' }}>
-            IRoan
-          </Text>
+          <Link href="https://roan.dev" target="_blank" rel="noopener noreferrer">
+            <Text size="2" color="accent" style={{ color: 'var(--accent-9)' }}>
+              IIRoan
+            </Text>
+          </Link>
           <Text size="2" color="gray">
             . All rights reserved.
           </Text>
